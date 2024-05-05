@@ -4,9 +4,24 @@
 #include <stdlib.h>
 #include <time.h>
 
+// TODO: rewrite collision on line 116 - 121
+
 int randrange(int min, int max) {
 	int output = (rand() % (max-min+1))+min;
 	return output;
+}
+
+int newID(int old) {
+	srand(time(0));
+	bool done=false;
+	int new;
+	while (done==false) {
+		new = randrange(0,6);
+		if (new!=old) {
+			done=true;
+		}
+	}
+	return new;
 }
 
 int main(void) { // this code is a mess but it works
@@ -21,8 +36,10 @@ int main(void) { // this code is a mess but it works
 	bool lkeyup = true;
 	bool rkeyup = true;
 	bool hdup = true;
+	bool debug = true;
 
-	int levels[] = {120,110,100,95,85,75,60,50,40,30,20,15};
+	int levels[] = {120,110,100,95,85,75};
+	int score = 0;
 	int level=0;
 	int gridsize[] = {10,20};
 	int framespast = 0;
@@ -98,14 +115,22 @@ int main(void) { // this code is a mess but it works
 
 		// move current block
 		if (IsKeyDown(KEY_RIGHT) && rkeyup==true) {
-			if (cblockpos[0]!=whalf+90) {
+			int offset = 0;
+			if (cblockid==0) {
+				offset=90;
+			}
+			else {
+				offset=120;
+			}
+
+			if (getFarRightCollision(cblockid,cblockpos[0])!=whalf+offset) {
 				cblockpos[0]+=30;
 				rkeyup=false;
 			}
 		}
 		
 		if (IsKeyDown(KEY_LEFT) && lkeyup==true) {
-			if (cblockpos[0]!=whalf-150) {
+			if (getFarLeftCollision(cblockid,cblockpos[0])!=whalf-150) {
 				cblockpos[0]-=30;
 				lkeyup=false;
 			}
@@ -123,22 +148,38 @@ int main(void) { // this code is a mess but it works
 			hdup=false;
 		}
 
+		if (debug==true) {
+			// check if text displays correctly
+			if (IsKeyDown(KEY_T)) {
+				score++;
+			}
+			if (IsKeyDown(KEY_G)) {
+				score--;
+			}
+		}
+
+
 		if (cblockpos[1]==630) {
 			permblocks[pblockcount][0]=cblockpos[0];
 			permblocks[pblockcount][1]=cblockpos[1];
 			permblocks[pblockcount][2]=cblockid;
 			pblockcount++;
+			cblockid=newID(cblockid);
 
-			srand(time(0));
-			cblockid=randrange(0,6);
 			cblockpos[0]=whalf-30;
 			cblockpos[1]=60;
 		}
 
 		getBlockFromId(cblockid,cblockpos[0],cblockpos[1]);
+		if (debug==true) {
+			DrawText(TextFormat("block id:%d",cblockid),0,50,20,LIGHTGRAY);
+			DrawText(TextFormat("placed: %d",pblockcount),0,75,20,LIGHTGRAY);
+			DrawText(TextFormat("ls: %d",levels[level]),0,100,20,LIGHTGRAY);
+		}
 
-		DrawText(TextFormat("block id:%d",cblockid),0,50,20,LIGHTGRAY);
-		DrawText(TextFormat("placed: %d",pblockcount),0,75,20,LIGHTGRAY);
+		// info
+		DrawText(TextFormat("Score: %d\nLevel: %d",score,level),(width/4)*3+40,(720/2)-10,20,LIGHTGRAY);
+
 		EndDrawing();
 		framespast++;
 	}
@@ -146,3 +187,4 @@ int main(void) { // this code is a mess but it works
 	CloseWindow();
 	return 0;
 }
+

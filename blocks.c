@@ -83,3 +83,17 @@ int getBlockFromId(int id,int x, int y) {
 			return 1;
 	}
 }
+
+int getFarLeftCollision(int id,int x) {
+	if (id==3) {
+		return x;
+	}
+	return x-30;
+}
+
+int getFarRightCollision(int id,int x) {
+	if (id==0) {
+		return x+30;
+	}
+	return x+30;
+}
