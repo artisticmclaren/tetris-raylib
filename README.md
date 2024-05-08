@@ -2,6 +2,8 @@
 I decided to learn C and raylib by making tetris.
 
 # Build Instructions
-1. get and install w64devkit (tutorial on the raylib "working with windows" part of the wiki
+
+1. get and install w64devkit (tutorial on the raylib "working with windows" part of the wiki)
 2. open w64devkit.exe
-3. run bash compile.sh
+3. cd into whatever folder this is downloaded into
+4. run bash compile.sh
