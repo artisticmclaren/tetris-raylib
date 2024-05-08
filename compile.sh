@@ -1,2 +1,3 @@
-gcc -o main main.c -lraylib -lgdi32 -lwinmm
-./main.exe
+set -e
+cc main.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+wine ./main.exe
