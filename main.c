@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-// TODO: rewrite collision on line 116 - 121
-
 int randrange(int min, int max) {
 	int output = (rand() % (max-min+1))+min;
 	return output;
@@ -24,7 +22,7 @@ int newID(int old) {
 	return new;
 }
 
-int main(void) { // this code is a mess but it works
+int main(void) { 
 	int width = 1280;
 	int height = 720;
 	int whalf = width/2;
@@ -148,17 +146,6 @@ int main(void) { // this code is a mess but it works
 			hdup=false;
 		}
 
-		if (debug==true) {
-			// check if text displays correctly
-			if (IsKeyDown(KEY_T)) {
-				score++;
-			}
-			if (IsKeyDown(KEY_G)) {
-				score--;
-			}
-		}
-
-
 		if (cblockpos[1]==630) {
 			permblocks[pblockcount][0]=cblockpos[0];
 			permblocks[pblockcount][1]=cblockpos[1];
@@ -187,4 +174,3 @@ int main(void) { // this code is a mess but it works
 	CloseWindow();
 	return 0;
 }
-
